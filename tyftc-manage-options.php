@@ -9,46 +9,83 @@
 if ( ! current_user_can( 'manage_options' ) )
 	wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 
-$title = __('TYFTC Settings');
+$title = __('TYTC Settings');
 $parent_file = 'options-general.php';
 
-/**
- * Display JavaScript on the page.
- *
- * @package WordPress
- * @subpackage General_Settings_Screen
- */
-function tyftc_add_js() {
-?>
-<script type="text/javascript">
-//<![CDATA[
-	jQuery(document).ready(function($){
-		
-	});
-//]]>
-</script>
-<?php
-}
-add_action('admin_head', 'tytc_add_js');
-?>
+// handle form submit
+if (isset($_POST['submit'])) {
+  // check if tyftc is enabled
+  $tyftc_enabled = isset($_POST['tyftc-enabled']) ? 1 : 0;
+  update_option('tyftc-enabled', $tyftc_enabled);
+  
+  // if tyftc is enabled process the rest of the options
+  if ($tyftc_enabled) {
+    update_option('tyftc-popup-content', $_POST['tyftc-popup-content']);
 
+    $popup_with = isset($_POST['tyftc-popup-width']) && is_numeric($_POST['tyftc-popup-width'])
+                  ? intval($_POST['tyftc-popup-width']) : 100;
+    update_option('tyftc-popup-width', $popup_with);
+
+    $popup_height = isset($_POST['tyftc-popup-height']) && $_POST['tyftc-popup-height']
+                  ? intval($_POST['tyftc-popup-height']) : 100;
+    update_option('tyftc-popup-height', $popup_height);
+  }
+}
+
+?>
 <div class="wrap">
   <?php screen_icon(); ?>
   <h2><?php echo esc_html($title); ?></h2>
+  <?php if (isset($_POST['submit'])): ?>
+  <div id="setting-error-settings_updated" class="updated settings-error"> 
+    <p><strong><?php echo _e('Settings saved.') ?></strong></p>
+  </div>
+  <?php endif; ?>
     
-  <form method="post" action="options.php">
-    <?php settings_fields('tyftc'); ?>
-  
+  <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?page=tyftc-manage">
+    
     <table class="form-table">
       <tr valign="top">
-        <th scope="row"><label for="blogname"><?php _e('Site Title') ?></label></th>
-        <td><input name="blogname" type="text" id="blogname" value="<?php form_option('blogname'); ?>" class="regular-text" /></td>
+        <th scope="col" colspan="2"><h3><?php _e('Options') ?></h3></th>
       </tr>
-      <?php do_settings_fields('tyftc', 'default'); ?>
-    </table>
+      <tr valign="top">
+        <th scope="row"><label for="tyftc-enabled"><?php _e('Enabled') ?></label></th>
+        <td>
+          <input name="tyftc-enabled" 
+                 type="checkbox" 
+                 id="tyftc-enabled" 
+                 <?php echo 1 == get_option('tyftc-enabled', 0) ? 'checked' : '' ?> />
+        </td>
+      </tr>
+      <tr valign="top">
+        <th scope="row"><label for="tyftc-popup-width"><?php _e('Width') ?></label></th>
+        <td>
+          <input name="tyftc-popup-width" 
+                 type="text" 
+                 id="tyftc-popup-width" 
+                 value="<?php echo get_option('tyftc-popup-width') ?>" 
+                 class="small-text" /> px
+        </td>
+      </tr>
+      <tr valign="top">
+        <th scope="row"><label for="tyftc-popup-height"><?php _e('Height') ?></label></th>
+        <td>
+          <input name="tyftc-popup-height" 
+                 type="text" 
+                 id="tyftc-popup-height" 
+                 value="<?php echo get_option('tyftc-popup-height') ?>" 
+                 class="small-text" /> px
+        </td>
+      </tr>
+      <tr valign="top">
+        <th scope="row"><label for="tyftc-popup-content"><?php _e('Content') ?></label></th>
+        <td>
+          <textarea name="tyftc-popup-content" id="tyftc-popup-content"><?php echo get_option('tyftc-popup-content') ?></textarea>
+          <span class="description"><?php _e('HTML or plain text') ?></span>
+        </td>
+      </tr>
+    </table>      
       
-    <?php do_settings_sections('tyftc'); ?>
-  
     <?php submit_button(); ?>
   </form>
     
