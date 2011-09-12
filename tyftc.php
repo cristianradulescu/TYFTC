@@ -58,12 +58,11 @@ function tyftc_post_redirect($location) {
   }
   
   tyftc_wp_head();
-	?>
-  <a id="tyftc-popup-trigger" class="example" href="#"></a>
+  ?>
+  <a id="tyftc-popup-trigger" class="colorbox-popup-trigger" href="#"></a>
   <script>
-		jQuery(document).ready(function(){
-			//Examples of how to assign the ColorBox event to elements
-			jQuery(".example").colorbox({
+    jQuery(document).ready(function(){
+      jQuery(".colorbox-popup-trigger").colorbox({
         width:<?php echo get_option('tyftc-popup-width') ?>, 
         height:<?php echo get_option('tyftc-popup-height') ?>, 
         inline:true,
@@ -71,15 +70,15 @@ function tyftc_post_redirect($location) {
         open: true,
         onClosed: function() { window.location.replace('<?php echo $location ?>') }
       });
-      
+
       jQuery('#tyftc-popup-trigger').trigger('click');
-		});
-	</script>
-	<div style="display:none"> 
-		<div id="popup_content" style="padding:10px; background:#fff;">
-        <?php echo get_option('tyftc-popup-content', 'Thank you!') ?>
-		</div> 
-	</div> 
+    });
+  </script>
+  <div style="display:none"> 
+    <div id="popup_content" style="padding:10px; background:#fff;">
+      <?php echo get_option('tyftc-popup-content', 'Thank you!') ?>
+    </div> 
+  </div> 
   <?php
 }
 
