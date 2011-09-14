@@ -1,8 +1,11 @@
 <?php
 /**
  * Plugin Name: Thank you for the comment
- * Author: Cristian Radulescu
+ * Plugin URI: http://cristian-radulescu.ro/tyftc-wordpress-plugin
+ * Description: Display a popup with customizable content (HTML or plain text) after a comment is added
  * Version: 1.0
+ * Author: Cristian Radulescu
+ * Author URI: http://cristian-radulescu.ro
  */
 
 // Check for location modifications in wp-config
