@@ -78,10 +78,30 @@ if (isset($_POST['submit'])) {
         </td>
       </tr>
       <tr valign="top">
-        <th scope="row"><label for="tyftc-popup-content"><?php _e('Content') ?></label></th>
+        <th scope="row"><label for="tyftc-popup-content"><?php _e('Content') ?></label><br/>
+        <span class="description"><?php _e('HTML or plain text') ?></span></th>
         <td>
-          <textarea name="tyftc-popup-content" id="tyftc-popup-content"><?php echo get_option('tyftc-popup-content') ?></textarea>
-          <span class="description"><?php _e('HTML or plain text') ?></span>
+          <textarea cols="80" rows="10" name="tyftc-popup-content" id="tyftc-popup-content"><?php echo get_option('tyftc-popup-content') ?></textarea>
+          
+          <br />
+          <a id="tyftc-popup-trigger" class="colorbox-popup-trigger" href="#">Preview</a>
+          <script>
+            jQuery(document).ready(function(){
+              jQuery('#tyftc-popup-trigger').click(function() {
+                jQuery('#popup_content').html(jQuery('#tyftc-popup-content').val());
+                jQuery(".colorbox-popup-trigger").colorbox({
+                  width:parseInt(jQuery('#tyftc-popup-width').val()), 
+                  height:parseInt(jQuery('#tyftc-popup-height').val()), 
+                  inline:true,
+                  href: "#popup_content"
+                });
+              });
+            });
+          </script>
+          <div style="display:none"> 
+            <div id="popup_content" style="padding:10px; background:#fff;">
+            </div> 
+          </div> 
         </td>
       </tr>
     </table>      

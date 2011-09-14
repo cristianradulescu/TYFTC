@@ -33,15 +33,28 @@ function tyftc_manage() {
 }
 
 /**
- * Add custom resources on the frontend
+ * Add custom resources
  */
-function tyftc_wp_head() {
+function tyftc_head() {
   wp_enqueue_style('colorbox', TYFTC_PLUGPATH.'js/colorbox/colorbox.css');
   wp_print_styles('colorbox');
 
   wp_register_script('colorbox', TYFTC_PLUGPATH.'js/colorbox/jquery.colorbox-min.js');
-  wp_register_script('tyftc-frontend', TYFTC_PLUGPATH.'js/tyftc.js');
-  wp_print_scripts(array('jquery', 'colorbox', 'tyftc-frontend'));
+  wp_print_scripts(array('jquery', 'colorbox'));
+}
+
+/**
+ * Add custom resources on the admin dashboard
+ */
+function tyftc_admin_head() {
+  tyftc_head();
+}
+
+/**
+ * Add custom resources on the frontend
+ */
+function tyftc_wp_head() {
+  tyftc_head();
 }
 
 /**
@@ -84,4 +97,5 @@ function tyftc_post_redirect($location) {
 
 add_filter('comment_post_redirect', 'tyftc_post_redirect');
 add_action('admin_menu', 'tyftc_admin_menu');
+add_action('admin_head', 'tyftc_admin_head');
 add_action('wp_head', 'tyftc_wp_head');
